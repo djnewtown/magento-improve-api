@@ -121,7 +121,7 @@ class Bubble_Api_Helper_Catalog_Product extends Mage_Core_Helper_Abstract
         $priceChanges = array(),
         $configurableAttributes = array()
     ) {
-        if (!$mainProduct->isConfigurable() || empty($simpleProductIds)) {
+        if (empty($simpleProductIds) || !$mainProduct->isConfigurable()) {
             return $this;
         }
 
@@ -181,6 +181,7 @@ class Bubble_Api_Helper_Catalog_Product extends Mage_Core_Helper_Abstract
                     );
                 }
             }
+            unset($attribute);
             $mainProduct->setConfigurableAttributesData($attributesData);
         }
 

@@ -1,0 +1,4 @@
+src/app/code/community/Bubble/Api app/code/community/Bubble/Api
+src/app/design/adminhtml/base/default/template/bubble/api app/design/adminhtml/base/default/template/bubble/api
+src/app/etc/modules/Bubble_Api.xml app/etc/modules/Bubble_Api.xml
+src/app/locale/fr_FR/Bubble_Api.csv app/locale/fr_FR/Bubble_Api.csv

@@ -10,11 +10,15 @@ class Bubble_Api_Helper_Catalog_Product extends Mage_Core_Helper_Abstract
      * @param array $priceChanges
      * @return Bubble_Api_Helper_Catalog_Product
      */
-    public function associateProducts(Mage_Catalog_Model_Product $product, $simpleSkus, $priceChanges = array(), $configurableAttributes = array())
-    {
+    public function associateProducts(
+        Mage_Catalog_Model_Product $product,
+        $simpleSkus,
+        $priceChanges = array(),
+        $configurableAttributes = array()
+    ) {
         if (!empty($simpleSkus)) {
             $newProductIds = Mage::getModel('catalog/product')->getCollection()
-                ->addFieldToFilter('sku', array('in' => (array) $simpleSkus))
+                ->addFieldToFilter('sku', array('in' => (array)$simpleSkus))
                 ->addFieldToFilter('type_id', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
                 ->getAllIds();
 
@@ -26,9 +30,10 @@ class Bubble_Api_Helper_Catalog_Product extends Mage_Core_Helper_Abstract
             $usedProductIds = array_diff($newProductIds, $oldProductIds);
 
             if (!empty($newProductIds) && $product->isConfigurable()) {
-                $this->_initConfigurableAttributesData($product, $newProductIds, $priceChanges, $configurableAttributes);
+                $this->_initConfigurableAttributesData($product, $newProductIds, $priceChanges,
+                    $configurableAttributes);
             }
-            
+
             if (!empty($usedProductIds) && $product->isGrouped()) {
                 $relations = array_fill_keys($usedProductIds, array('qty' => 0, 'position' => 0));
                 $product->setGroupedLinkData($relations);
@@ -62,9 +67,9 @@ class Bubble_Api_Helper_Catalog_Product extends Mage_Core_Helper_Abstract
                     $parentIds = array();
                     if ($collection->count()) {
                         foreach ($collection as $category) {
-                            $addCategories[] = (int) $category->getId();
+                            $addCategories[] = (int)$category->getId();
                             if ($level > 0) {
-                                $addCategories[] = (int) $category->getParentId();
+                                $addCategories[] = (int)$category->getParentId();
                             }
                             $parentIds[] = $category->getId();
                         }
@@ -110,8 +115,12 @@ class Bubble_Api_Helper_Catalog_Product extends Mage_Core_Helper_Abstract
      * @param array $priceChanges
      * @return Bubble_Api_Helper_Catalog_Product
      */
-    protected function _initConfigurableAttributesData(Mage_Catalog_Model_Product $mainProduct, $simpleProductIds, $priceChanges = array(), $configurableAttributes = array())
-    {
+    protected function _initConfigurableAttributesData(
+        Mage_Catalog_Model_Product $mainProduct,
+        $simpleProductIds,
+        $priceChanges = array(),
+        $configurableAttributes = array()
+    ) {
         if (!$mainProduct->isConfigurable() || empty($simpleProductIds)) {
             return $this;
         }
@@ -132,7 +141,7 @@ class Bubble_Api_Helper_Catalog_Product extends Mage_Core_Helper_Abstract
             $productType->setUsedProductAttributeIds($attributeIds);
             $attributesData = $productType->getConfigurableAttributesAsArray();
         }
-        if (!empty($configurableAttributes)){
+        if (!empty($configurableAttributes)) {
             foreach ($attributesData as $idx => $val) {
                 if (!in_array($val['attribute_id'], $configurableAttributes)) {
                     unset($attributesData[$idx]);
@@ -162,7 +171,7 @@ class Bubble_Api_Helper_Catalog_Product extends Mage_Core_Helper_Abstract
                                 $isPercent = 1;
                             }
                             $priceChange = preg_replace('/[^0-9\.,-]/', '', $priceChanges[$attributeCode][$optionText]);
-                            $priceChange = (float) str_replace(',', '.', $priceChange);
+                            $priceChange = (float)str_replace(',', '.', $priceChange);
                         }
                     }
                     $attribute['values'][$optionId] = array(
